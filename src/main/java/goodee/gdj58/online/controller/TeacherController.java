@@ -78,6 +78,7 @@ public class TeacherController {
 		
 		model.addAttribute("list", list); // request.setAttribute("list", list) 기능 (매개변수 model 필요)
 		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("rowPerPage", rowPerPage);
 		model.addAttribute("searchWord", searchWord);
 		
 		Map<String, Object> map = teacherService.getTeacherCount(currentPage, rowPerPage, searchWord);

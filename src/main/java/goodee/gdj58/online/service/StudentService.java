@@ -43,12 +43,15 @@ public class StudentService {
 		log.debug("\u001B[31m" + studentCount + "<-- studentCount");
 		
 		int startPage = currentPage / 10 * 10 + 1;
-		
 		int endPage = currentPage / 10 * 10 + 10;
-
-		int lastPage = studentCount / 10;
-		if(lastPage % 10 != 0 || lastPage == 0) {
-			lastPage++;
+		if(currentPage % 10 == 0) { // 페이지 일의 자리 숫자가 0일경우
+			startPage = startPage - 10;			
+			endPage = endPage - 10;
+		}
+		
+		int lastPage = studentCount / rowPerPage;
+		if(lastPage % rowPerPage != 0  || lastPage == 0) {
+			lastPage++;	
 		}
 		
 		if(endPage > lastPage) {

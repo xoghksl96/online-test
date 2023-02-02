@@ -25,6 +25,30 @@ a:visited{color : blue;}
 	<br>
 	
 	<form method="get" action="${pageContext.request.contextPath}/employee/student/studentList">
+		<c:if test="${rowPerPage == 5}">
+			<select name="rowPerPage">
+				<option value="5" selected="selected">5</option>
+				<option value="10">10</option>
+				<option value="20">20</option>
+			</select>
+		</c:if>
+		
+		<c:if test="${rowPerPage == 10}">
+			<select name="rowPerPage">
+				<option value="5">5</option>
+				<option value="10" selected="selected">10</option>
+				<option value="20">20</option>
+			</select>
+		</c:if>
+		
+		<c:if test="${rowPerPage == 20}">
+			<select name="rowPerPage">
+				<option value="5">5</option>
+				<option value="10">10</option>
+				<option value="20" selected="selected">20</option>
+			</select>
+		</c:if>
+		
 		<input type="text" name="searchWord" value="${searchWord}">
 		<button type="submit">검색</button>
 	</form>

@@ -54,6 +54,7 @@ public class StudentController {
 		return "redirect:/student/studentList"; // sendRedict , cm
 	}
 	
+	
 	// StudentList 출력
 	@GetMapping("/employee/student/studentList")
 	public String studentList(Model model
@@ -66,6 +67,7 @@ public class StudentController {
 		
 		model.addAttribute("list", list); // request.setAttribute("list", list) 기능 (매개변수 model 필요)
 		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("rowPerPage", rowPerPage);
 		model.addAttribute("searchWord", searchWord);
 		
 		Map<String, Object> map = studentService.getStudentCount(currentPage, rowPerPage, searchWord);

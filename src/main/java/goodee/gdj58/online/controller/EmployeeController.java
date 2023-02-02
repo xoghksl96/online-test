@@ -15,19 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import goodee.gdj58.online.filter.EmployeeLoginFilter;
 import goodee.gdj58.online.service.EmployeeService;
 import goodee.gdj58.online.service.IdService;
-import goodee.gdj58.online.service.StudentService;
-import goodee.gdj58.online.service.TeacherService;
 import goodee.gdj58.online.vo.Employee;
-import goodee.gdj58.online.vo.Student;
-import goodee.gdj58.online.vo.Teacher;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j // static Log log = new Log() 로그 객체를 선언하여 사용할 수 있게 함
 @Controller
 public class EmployeeController {
 	@Autowired EmployeeService employeeService;
-	@Autowired StudentService studentService;
-	@Autowired TeacherService teacherService;
 	@Autowired IdService idService;
 	
 	// 비밀번호 수정
@@ -117,6 +111,7 @@ public class EmployeeController {
 		
 		model.addAttribute("list", list); // request.setAttribute("list", list) 기능 (매개변수 model 필요)
 		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("rowPerPage", rowPerPage);
 		model.addAttribute("searchWord", searchWord);
 		
 		Map<String, Object> map = employeeService.getEmployeecount(currentPage, rowPerPage, searchWord);
