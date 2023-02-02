@@ -11,5 +11,6 @@ import goodee.gdj58.online.vo.Teacher;
 public interface TeacherMapper {
 	int deleteTeacher(int teacherNo);
 	int insertTeacher(Teacher teacher);
+	int selectTeacherCount(String searchWord);
 	List<Teacher> selectTeacherList(Map<String, Object> paramMap);
 }

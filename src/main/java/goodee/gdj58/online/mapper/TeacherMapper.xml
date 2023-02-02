@@ -5,13 +5,13 @@
 	<delete id="deleteTeacher"
 		parameterType="int">
 		DELETE
-		FROM Teacher
+		FROM teacher
 		WHERE teacher_no = #{teacherNo}
 	</delete>
 	
 	<insert id="insertTeacher"
 		 parameterType="goodee.gdj58.online.vo.Teacher">
-		INSERT INTO Teacher (teacher_id, teacher_pw, teacher_name)
+		INSERT INTO teacher (teacher_id, teacher_pw, teacher_name)
 		VALUES (#{teacherId}, PASSWORD(#{teacherPw}), #{teacherName})
 	</insert>
 
@@ -24,8 +24,28 @@
 			, teacher_id teacherId
 			, teacher_name teacherName
 		FROM
-			Teacher
+			teacher
+		<where>
+			<if test="searchWord != null || searchWord != ''">
+				teacher_name LIKE CONCAT('%', #{searchWord}, '%')
+			</if>
+		</where>	
 		ORDER BY teacher_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}
+	</select>
+	
+	<select id = "selectTeacherCount"
+		 resultType="int"
+		 parameterType="java.lang.String">
+		 
+		SELECT
+			count(*) teacherCount
+		FROM
+			teacher
+		<where>
+			<if test="searchWord != null || searchWord != ''">
+				teacher_name LIKE CONCAT('%', #{searchWord}, '%')
+			</if>
+		</where>
 	</select>
 </mapper>

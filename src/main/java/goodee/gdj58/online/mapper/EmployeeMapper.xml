@@ -43,7 +43,27 @@
 			, emp_name empName
 		FROM
 			employee
+		<where>
+			<if test="searchWord != null || searchWord != ''">
+				emp_name LIKE CONCAT('%', #{searchWord}, '%')
+			</if>
+		</where>
 		ORDER BY emp_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}
+	</select>
+	
+	<select id = "selectEmployeeCount"
+		 resultType="int"
+		 parameterType="java.lang.String">
+		 
+		SELECT
+			count(*) empCount
+		FROM
+			employee
+		<where>
+			<if test="searchWord != null || searchWord != ''">
+				emp_name LIKE CONCAT('%', #{searchWord}, '%')
+			</if>
+		</where>
 	</select>
 </mapper>

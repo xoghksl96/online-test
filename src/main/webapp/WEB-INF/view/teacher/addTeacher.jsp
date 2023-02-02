@@ -8,7 +8,7 @@
 <body>
 	<h1>강사추가</h1>
 	<div style="color : red">${errorMsg}</div>
-	<form method="post" action="${pageContext.request.contextPath}/teacher/addTeacher">
+	<form method="post" action="${pageContext.request.contextPath}/employee/teacher/addTeacher">
 		<table border="1">
 			<tr>
 				<td>teacherId</td>

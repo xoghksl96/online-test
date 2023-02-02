@@ -13,6 +13,7 @@ public interface EmployeeMapper {
 	Employee login(Employee employee);
 	int deleteEmployee(int empNo);
 	int insertEmployee(Employee employee);
+	int selectEmployeeCount(String searchWord);
 	List<Employee> selectEmployeeList(Map<String, Object> paramMap);
 }
 

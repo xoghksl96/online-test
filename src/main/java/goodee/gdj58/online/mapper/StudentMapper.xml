@@ -25,7 +25,28 @@
 			, student_name studentName
 		FROM
 			student
+		<where>
+			<if test="searchWord != null || searchWord != ''">
+				student_name LIKE CONCAT('%', #{searchWord}, '%')
+			</if>
+		</where>
 		ORDER BY student_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
+	
+	<select id = "selectStudentCount"
+		 resultType="int"
+		 parameterType="java.lang.String">
+		 
+		SELECT
+			count(*) studentCount
+		FROM
+			student
+		<where>
+			<if test="searchWord != null || searchWord != ''">
+				student_name LIKE CONCAT('%', #{searchWord}, '%')
+			</if>
+		</where>
+	</select>
+	
 </mapper>
