@@ -56,13 +56,17 @@ public class EmployeeService {
 		int employeeCount = employeeMapper.selectEmployeeCount(searchWord);
 		log.debug("\u001B[31m" + employeeCount + "<-- employeeCount");
 		
+
 		int startPage = currentPage / 10 * 10 + 1;
-		
 		int endPage = currentPage / 10 * 10 + 10;
 
+		if(currentPage % 10 == 0) { // 일의 자리 숫자가 0일경우
+			startPage = startPage - 10;			
+			endPage = endPage - 10;
+		}
 		int lastPage = employeeCount / 10;
 		if(lastPage % 10 != 0  || lastPage == 0) {
-			lastPage++;
+			lastPage++;	
 		}
 		
 		if(endPage > lastPage) {

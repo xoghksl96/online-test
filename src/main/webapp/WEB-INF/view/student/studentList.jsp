@@ -51,7 +51,7 @@ a:visited{color : blue;}
 		
 		<!-- 이전(-10) -->
 		<c:choose>
-			<c:when test="${currentPage - 10 > 1}">
+			<c:when test="${currentPage - 10 >= 1}">
 				<a href="${pageContext.request.contextPath}/employee/student/studentList?currentPage=${map.startPage-10}&searchWord=${searchWord}">이전</a>
 			</c:when>
 			<c:otherwise>
