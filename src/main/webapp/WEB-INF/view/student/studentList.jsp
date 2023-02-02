@@ -25,7 +25,7 @@ a:visited{color : blue;}
 	<br>
 	
 	<form method="get" action="${pageContext.request.contextPath}/employee/student/studentList">
-		<input type="text" name="searchWord">
+		<input type="text" name="searchWord" value="${searchWord}">
 		<button type="submit">검색</button>
 	</form>
 	
