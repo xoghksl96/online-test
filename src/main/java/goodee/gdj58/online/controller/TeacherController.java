@@ -25,6 +25,32 @@ public class TeacherController {
 	@Autowired TeacherService teacherService;
 	@Autowired IdService idService;
 	
+	// testList 출력
+	@GetMapping("/teacher/testList")
+	public String getTestList(HttpSession session, Model model
+			, @RequestParam(value="currentPage", defaultValue="1") int currentPage
+			, @RequestParam(value="rowPerPage", defaultValue="10") int rowPerPage
+			, @RequestParam(value="searchWord", defaultValue="") String searchWord) {
+		
+		Teacher loginTeacher = (Teacher) session.getAttribute("loginTeacher");
+		int teacherNo = loginTeacher.getTeacherNo();
+		//List<Map<String, Object>> list = teacherService.getTestList(currentPage,rowPerPage,searchWord);
+		
+		return "";
+	}
+	// 로그인
+	@GetMapping("/loginTeacher")
+	public String loginTeacehr() {
+		return "teacher/loginTeacher";
+	}
+	
+	@PostMapping("/loginTeacher")
+	public String loginTeacehr(HttpSession session, Teacher teacher) {
+		Teacher resultTeacher = teacherService.login(teacher);	// row == 1이면 입력성공
+		session.setAttribute("loginTeacher", resultTeacher);
+		return "redirect:/teacher/testList";
+	}
+		
 	// teacherPw 수정
 	@GetMapping("/teacher/modifyTeacherPw")
 	public String modifyTeacherPw(HttpSession session) {

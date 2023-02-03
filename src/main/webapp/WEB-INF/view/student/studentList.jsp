@@ -13,6 +13,7 @@ a {
 }
 a:link {color : blue;}
 a:visited{color : blue;}
+a:hover {color : red;}
 
 </style>
 <body>
@@ -86,7 +87,7 @@ a:visited{color : blue;}
 		<!-- startPage <= currentPage <= endPage -->
 		<c:forEach var="i" begin="${map.startPage}" end="${map.endPage}" step="1">
 			<c:if test="${currentPage == i}">
-				<span>${i}</span>
+				<a href="#" style="color : red">${i}</a>
 			</c:if>
 			<c:if test="${currentPage != i}">
 				<a href="${pageContext.request.contextPath}/employee/student/studentList?currentPage=${i}&searchWord=${searchWord}">${i}</a>

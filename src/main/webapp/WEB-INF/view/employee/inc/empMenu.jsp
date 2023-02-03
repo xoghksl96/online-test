@@ -11,5 +11,7 @@
 	
 	<a href="${pageContext.request.contextPath}/employee/modifyEmpPw">비밀번호 수정</a>
 	<!-- 비밀번호 수정 -->
+	
 	<a href="${pageContext.request.contextPath}/employee/logout">로그아웃</a>
+	<!-- 로그아웃 -->
 </div>

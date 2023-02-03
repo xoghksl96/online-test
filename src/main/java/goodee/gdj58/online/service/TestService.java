@@ -8,43 +8,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import goodee.gdj58.online.mapper.TeacherMapper;
-import goodee.gdj58.online.vo.Teacher;
+import goodee.gdj58.online.mapper.TestMapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j // static Log log = new Log() 로그 객체를 선언하여 사용할 수 있게 함
 @Service
 @Transactional
-public class TeacherService {
+public class TestService {
+	
 	@Autowired
-	private TeacherMapper teacherMapper;
+	private TestMapper testMapper;
 	
-	public Teacher login(Teacher teacher) {
-		return teacherMapper.login(teacher);
-	}
-	
-	public int removeTeacher(int teacherNo) {
-		return teacherMapper.deleteTeacher(teacherNo);
-	}
-	
-	public int addTeacher(Teacher teacher) {
-		return teacherMapper.insertTeacher(teacher);
-	}
-	
-	public List<Teacher> getTeacherList(int currentPage, int rowPerPage, String searchWord) {
+	public List<Map<String, Object>> getTestList (int teacherNo, int currentPage,int rowPerPage,String searchWord) {
 		int beginRow = (currentPage-1) * rowPerPage;
 		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("teacherNo", teacherNo);
 		paramMap.put("beginRow", beginRow);
 		paramMap.put("rowPerPage", rowPerPage);
 		paramMap.put("searchWord", searchWord);
 		
-		return teacherMapper.selectTeacherList(paramMap);
+		return testMapper.selectTestList(paramMap);
 	}
 	
-	public Map<String, Object> getTeacherCount(int currentPage, int rowPerPage, String searchWord) {
-		int teacherCount = teacherMapper.selectTeacherCount(searchWord);
-		log.debug("\u001B[31m" + teacherCount + "<-- teacherCount");
+	public Map<String, Object> getTestCount (int teacherNo, int currentPage,int rowPerPage,String searchWord) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("teacherNo", teacherNo);
+		paramMap.put("searchWord", searchWord);
+		
+		int testCount = testMapper.selectTestCount(paramMap);
 		
 		int startPage = currentPage / 10 * 10 + 1;
 		int endPage = currentPage / 10 * 10 + 10;
@@ -53,7 +45,7 @@ public class TeacherService {
 			endPage = endPage - 10;
 		}
 		
-		int lastPage = teacherCount / rowPerPage;
+		int lastPage = testCount / rowPerPage;
 		if(lastPage % rowPerPage != 0  || lastPage == 0) {
 			lastPage++;	
 		}
@@ -66,7 +58,6 @@ public class TeacherService {
 		resultMap.put("endPage", endPage);
 		resultMap.put("lastPage", lastPage);
 		
-		return resultMap;
-		
+		return resultMap;	
 	}
 }

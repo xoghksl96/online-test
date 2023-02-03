@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="goodee.gdj58.online.mapper.TestMapper">
+
+	<select id="selectTestList"
+		resultType="java.util.Map"
+		parameterType="java.util.Map">
+		SELECT
+			test.test_no testNo
+			, test.teacher_no teacherNo
+			, test.test_title testTitle
+			, test.test_date testDate
+			, teacher.teacher_name teacherName
+		FROM test INNER JOIN teacher
+			ON test.teacher_no = teacher.teacher_no
+		<where>
+			<if test="teacherNo != null || teacherNo != 0">
+				test.teacher_no = #{teacherNo}
+				<if test="searchWord != null || searchWord != ''">
+					AND test_title LIKE CONCAT('%', #{searchWord}, '%')
+				</if>
+			</if>
+		</where>
+		ORDER BY teacher_no DESC
+		LIMIT #{beginRow}, #{rowPerPage}
+	</select>
+	
+	<select id="selectTestCount"
+		resultType="int"
+		parameterType="java.util.Map">
+		
+		SELECT
+			count(*)
+		FROM
+			test
+		<where>
+			<if test="teacherNo != null || teacherNo != 0">
+				test.teacher_no = #{teacherNo}
+				<if test="searchWord != null || searchWord != ''">
+					AND test_title LIKE CONCAT('%', #{searchWord}, '%')
+				</if>
+			</if>
+		</where>
+	</select>
+	
+</mapper>
