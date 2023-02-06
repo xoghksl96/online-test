@@ -2,6 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="goodee.gdj58.online.mapper.TestMapper">
 
+	<select id="selectTestOne"
+		resultType="java.util.Map"
+		parameterType="int">
+		SELECT
+			test.test_no testNo
+			, test.teacher_no teacherNo
+			, test.test_title testTitle
+			, test.test_date testDate
+			, teacher.teacher_name teacherName
+			, question.question_no questionNo
+			, question.question_idx questionIdx
+			, question.question_title questionTitle
+			, example.example_no exampleNo
+			, example.example_idx exampleIdx
+			, example.example_title exampleTitle
+			, example.example_ox exampleOx
+		FROM test 
+			INNER JOIN teacher
+			ON test.teacher_no = teacher.teacher_no
+			INNER JOIN question
+			ON test.test_no = question.test_no
+			INNER JOIN example
+			ON question.question_no = example.question_no
+		WHERE
+			test.test_no = #{testNo}
+		ORDER BY question.question_idx, example.example_idx
+	</select>
+	
 	<select id="selectTestList"
 		resultType="java.util.Map"
 		parameterType="java.util.Map">
@@ -21,7 +49,7 @@
 				</if>
 			</if>
 		</where>
-		ORDER BY teacher_no DESC
+		ORDER BY test.teacher_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
 	
@@ -42,5 +70,4 @@
 			</if>
 		</where>
 	</select>
-	
 </mapper>

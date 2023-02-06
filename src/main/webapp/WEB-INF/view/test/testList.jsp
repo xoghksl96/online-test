@@ -71,18 +71,16 @@ a:hover {color : red;}
 		<c:forEach var="l" items="${list}">
 			<tr>
 				<td>${l.teacherName}</td>
-				<td>${l.testTitle}</td>
+				<td><a href="${pageContext.request.contextPath}/teacher/test/testOne?testNo=${l.testNo}">${l.testTitle}</a></td>
 				<td>${l.testDate}</td>
 				<td>
 					<c:choose>
 						<c:when test="${loginTeacher != null}">
-							<a href="${pageContext.request.contextPath}/test/modifyTest?teacherNo=${loginTeacher.teahcerNo}&testNo=${l.testNo}">수정</a>
-							수정
+							<a href="${pageContext.request.contextPath}/test/modifyTest?teacherNo=${loginTeacher.teacherNo}&testNo=${l.testNo}">수정</a>
 						</c:when>
 						
 						<c:when test="${loginStudent != null}">
 							<a href="${pageContext.request.contextPath}/test/takeTest?studentNo=${loginStudent.studentNo}&testNo=${l.testNo}">응시</a>
-							응시
 						</c:when>
 					</c:choose>
 				</td>

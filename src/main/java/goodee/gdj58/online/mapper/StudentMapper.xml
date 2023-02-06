@@ -2,6 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="goodee.gdj58.online.mapper.StudentMapper">
 	
+	<select id="login"
+		resultType="goodee.gdj58.online.vo.Student"
+		parameterType="goodee.gdj58.online.vo.Student">
+		SELECT
+			student_no studentNo
+			, student_id studentId
+			, student_name studentName
+		FROM student
+		WHERE student_id = #{studentId} AND student_pw = PASSWORD(#{studentPw})
+	</select>
+	
 	<delete id="deleteStudent"
 		parameterType="int">
 		DELETE

@@ -16,6 +16,7 @@ import goodee.gdj58.online.service.IdService;
 import goodee.gdj58.online.service.StudentService;
 import goodee.gdj58.online.vo.Employee;
 import goodee.gdj58.online.vo.Student;
+import goodee.gdj58.online.vo.Teacher;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j // static Log log = new Log() 로그 객체를 선언하여 사용할 수 있게 함
@@ -23,6 +24,27 @@ import lombok.extern.slf4j.Slf4j;
 public class StudentController {
 	@Autowired StudentService studentService;
 	@Autowired IdService idService;
+	
+	
+	// 로그아웃
+	@GetMapping("/student/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/student/loginStudent";
+	}
+	
+	// 로그인
+	@GetMapping("/loginStudent")
+	public String loginTeacehr() {
+		return "student/loginStudent";
+	}
+	
+	@PostMapping("/loginStudent")
+	public String loginTeacehr(HttpSession session, Student student) {
+		Student resultStudent = studentService.login(student);	// row == 1이면 입력성공
+		session.setAttribute("loginStudent", resultStudent);
+		return "redirect:/student/testList";
+	}
 	
 	// student 삭제
 	@GetMapping("/employee/student/removeStudent")

@@ -18,7 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 public class StudentService {
 	@Autowired
 	private StudentMapper studentMapper;
-		
+	
+	public Student login(Student student) {
+		return studentMapper.login(student);
+	}
+	
 	public int removeStudent(int studentNo) {
 		return studentMapper.deleteStudent(studentNo);
 	}

@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface TestMapper {
 	
+	// 한 개의 테스트 조회
+	List<Map<String, Object>> selectTestOne(int testNo);
 	// 총 문제회차 조회
 	int selectTestCount(Map<String, Object> paramMap);
 	// 문제 리스트 조회 (문제정보 + 선생이름)
