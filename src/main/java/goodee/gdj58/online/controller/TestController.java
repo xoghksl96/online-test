@@ -1,5 +1,6 @@
 package goodee.gdj58.online.controller;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,24 +24,73 @@ import lombok.extern.slf4j.Slf4j;
 public class TestController {
 	@Autowired private TestService testService;
 	
+	// 시험문제 수정
+	@GetMapping("test/modifyTest")
+	public String modifyTest(Model model
+			,@RequestParam(value="testNo", defaultValue="0") int testNo
+			,@RequestParam(value="questionNo", defaultValue="0") int questionNo) {
+		
+		// 기존 문제를 보여주는 서비스 호출
+		Map<String,Object> map = testService.getQuestionAndExample(testNo, questionNo);
+		model.addAttribute("map",map);
+		model.addAttribute("testNo",testNo);
+		
+		return "/test/modifyTest";	
+	}
+	
+	@PostMapping("test/modifyTest")
+	public String modifyTest(Model model
+			,@RequestParam(value="questionNo", defaultValue="0") int testNo
+			,@RequestParam(value="questionNo", defaultValue="0") int questionNo
+			,@RequestParam(value="questionNo", defaultValue="0") String questionTitle
+			,@RequestParam(value="questionNo") int[] exampleNo
+			,@RequestParam(value="questionNo") String[] exampleTitle
+			,@RequestParam(value="questionNo") String[] exampleOx){
+		
+		testService.modifyQuestionAndExample(testNo, questionNo, questionTitle, exampleNo, exampleTitle, exampleOx);
+		
+		return "redirect:/teacher/test/testOne?testNo="+testNo;
+		}
+	
+	// 시험문제 삭제
+	@GetMapping("test/removeTest")
+	public String removeTest(Model model, HttpSession session
+			,@RequestParam(value="testNo", defaultValue="0") int testNo
+			,@RequestParam(value="questionNo", defaultValue="0") int questionNo){
+		
+		testService.removeQuestionAndExample(questionNo);
+		
+		model.addAttribute("testNo", testNo);
+		return "redirect:/teacher/test/testOne?testNo="+testNo;	
+	}
+	
 	// 시험 문제 추가
-	@PostMapping
+	@PostMapping("/test/addQuestionAndExample")
 	public String addTest(Model model, HttpSession session
 			,@RequestParam(value="testNo", defaultValue="0") int testNo
 			,@RequestParam(value="questionIdx", defaultValue="0") int questionIdx
 			,@RequestParam(value="questionTitle", defaultValue="") String questionTitle
-			,@RequestParam(value="exampleIdx", defaultValue="0") int exampleIdx[]
-			,@RequestParam(value="exampleTitle", defaultValue="") String exampleTitle[]
-			,@RequestParam(value="exampleTitle", defaultValue="오답") String exampleOx[]) {
+			,@RequestParam(value="exampleIdx") int[] exampleIdx
+			,@RequestParam(value="exampleTitle") String[] exampleTitle
+			,@RequestParam(value="exampleOx") String[] exampleOx) {
 		
-		int result = testService.addQuesetionAndExample(testNo, questionIdx, questionTitle, exampleIdx, exampleIdx, exampleOx);
+		System.out.println("testNo : " + testNo);
+		System.out.println("questionIdx : " + questionIdx);
+		System.out.println("questionTitle : " + questionTitle);
 		
-		if(result != 1) {
-			return "test/testOne";
+		for(int i=0; i<exampleIdx.length;i++) {
+			System.out.println(i + "번째 exampleIdx" + " : " + exampleIdx[i]);
+			System.out.println(i + "번째 exampleTitle" + " : " + exampleTitle[i]);
+			System.out.println(i + "번째 exampleOx" + " : " + exampleOx[i]);
 		}
-		return "/teacher/test/addTest";
+		log.debug("위치확인");
+		int result = testService.addQuesetionAndExample(testNo, questionIdx, questionTitle, exampleIdx, exampleTitle, exampleOx);
 		
+		if(result == 1) {
+			log.debug("문제 추가 성공!");
+		}
 		
+		return "/test/testOne";		
 	}
 	
 	// 시험 출력(하나의 시험)
@@ -49,8 +99,9 @@ public class TestController {
 			,@RequestParam(value="testNo", defaultValue="0") int testNo) {
 		
 		List<Map<String, Object>> list = testService.getTestOne(testNo);
+		System.out.println(list.size() +"<----listSieze");
 		model.addAttribute("list", list);
-		
+		model.addAttribute("testNo", testNo);
 		return "test/testOne";
 	}
 	
