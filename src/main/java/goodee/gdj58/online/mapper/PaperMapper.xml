@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="goodee.gdj58.online.mapper.PaperMapper">
+
+	<select id="selectAnswer"
+		resultType="goodee.gdj58.online.vo.Paper"
+		parameterType="java.util.Map">
+	
+		SELECT
+			paper_no paperNo
+			, test_no testNo
+			, question_no questionNo
+			, student_no studentNo
+			, answer
+		FROM
+		 	paper
+		 WHERE test_no = #{testNo} AND student_no = #{studentNo}	
+	</select>
+	
+	<select id="selectCorrectAnswer"
+		resultType="int"
+		parameterType="java.util.Map">
+		SELECT 
+			COUNT(*)
+		FROM test t
+		INNER JOIN question q
+		ON t.test_no = q.test_no
+		INNER JOIN example e
+		ON q.question_no = e.question_no
+		INNER JOIN paper p
+		ON q.question_no = p.question_no
+		INNER JOIN student s
+		ON p.student_no = s.student_no
+		WHERE t.test_no = #{testNo} AND e.example_ox = '정답' AND s.student_no = #{studentNo} AND e.example_idx = p.answer
+	</select>
+	
+	<insert id="insertPaper"
+		parameterType="java.util.Map">
+		
+		INSERT INTO
+		paper(test_no, question_no, student_no, answer)
+		VALUES(#{testNo}, #{questionNo}, #{studentNo}, #{answer})
+	
+	</insert>
+	
+	
+</mapper>

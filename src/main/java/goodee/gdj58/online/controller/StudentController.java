@@ -51,7 +51,7 @@ public class StudentController {
 	public String removeStudent(@RequestParam("studentNo") int studentNo) {
 		
 		studentService.removeStudent(studentNo);	// row == 1이면 삭제성공
-		return "redirect:/student/studentList";
+		return "redirect:/employee/student/studentList";
 	}
 	
 	// student 입력
@@ -62,18 +62,12 @@ public class StudentController {
 	@PostMapping("/employee/student/addStudent")
 	public String addStudent(Model model, Student student) {
 		
-		String id = idService.getIdCheck(student.getStudentId());
-		if(id != null) { // 입력한 ID가 기존 DB에 존재 시, 다시 회원가입 페이지로 이동
-			model.addAttribute("errorMsg", "중복된 ID");
-			return "student/addStudent";
-		}
-		
 		int row = studentService.addStudent(student);
 		if(row != 1) { // row != 1이면 입력실패
 			model.addAttribute("errorMsg", "시스템 에러로 인한 실패");
 			return "student/addStudent";
 		}
-		return "redirect:/student/studentList"; // sendRedict , cm
+		return "redirect:/employee/student/studentList"; // sendRedict , cm
 	}
 	
 	

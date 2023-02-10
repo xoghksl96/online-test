@@ -57,7 +57,7 @@
 			let exampleIdxListLength = exampleIdxList.length;
 			
 			for(let i=0; i<exampleIdxListLength; i++){
-				$(exampleIdxList[i]).val(i);
+				$(exampleIdxList[i]).val(i+1);
 				if($(exampleRadioList[i]).is(':checked')) {
 					$(exampleOxList[i]).val("정답");
 				}
@@ -69,6 +69,8 @@
 </script>
 </head>
 <body>
+	<c:import url="/WEB-INF/view/teacher/inc/teacherMenu.jsp"></c:import>
+	
 	<h1>시험 추가</h1>
 	
 	<c:forEach var="questionList" items="${list}">

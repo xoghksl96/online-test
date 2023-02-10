@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+</head>
+<body>
+
+	<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+<!-- 차트 모델값을 가져오는 코드 -->
+	<script>
+		let xModels = [];
+		let dataModel = []; // 2차원 배열
+		
+		$.ajax({
+			async : false // 동기처리
+			, url : '/online-test/scoreData'
+			, type : 'get'
+			, success : function(model){
+				// for(let i=0; i<model.length; i++) -> js for
+				// model.forEach(function(item, index){}) -> js forEach
+				// $.each(model, function(index, item){}) -> jquery forEach
+				
+				for(let attr in model[0]) {
+					xModels.push(attr);
+				}
+				
+				model.forEach(function(item) {
+					let arr = [];
+					for(let attr in item) {
+						arr.push(item[attr]);
+					}
+					dataModel.push(arr);
+				});
+				// dataModel = [[첫번째 1~12 성적배열],[],[]],
+			}
+		});
+	</script>
+
+	<!-- 차트를 그리는 스크립트 코드 -->
+	<script>
+	
+		new Chart("myChart", {
+		  type: "line",
+		  data: {
+		    labels: xModels,
+		    datasets: [{ 
+		      data: dataModel[0],
+		      borderColor: "red",
+		      fill: false
+		    }, { 
+		      data: dataModel[1],
+		      borderColor: "green",
+		      fill: false
+		    }, { 
+		      data: dataModel[2],
+		      borderColor: "blue",
+		      fill: false
+		    }]
+		  },
+		  options: {
+		    legend: {display: false}
+		  }
+		});
+	</script>
+</body>
+</html>

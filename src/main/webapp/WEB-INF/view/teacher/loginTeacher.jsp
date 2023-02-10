@@ -10,7 +10,7 @@
 <body>
 	<!-- 로그인 전 -->
 	<c:if test="${loginTeacher == null}">
-		<h1>로그인</h1>
+		<h1>강사 로그인</h1>
 		<form method="post" action="${pageContext.request.contextPath}/loginTeacher">
 			<table border="1">
 				<tr>
@@ -24,8 +24,10 @@
 			</table>
 			<button type="submit">로그인</button>
 		</form>
-	</c:if>
-	
+		
+		<a href="${pageContext.request.contextPath}/loginEmp">사원 로그인</a>
+		<a href="${pageContext.request.contextPath}/loginStudent">학생 로그인</a>
+	</c:if>	
 	<!-- 로그인 상태 -->
 	<c:if test="${loginTeacher != null}">
 		<!-- loginMenu -->

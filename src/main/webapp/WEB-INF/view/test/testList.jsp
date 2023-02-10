@@ -15,7 +15,15 @@ a:hover {color : red;}
 </style>
 </head>
 <body>
-	
+	<c:choose>		
+		<c:when test="${loginTeacher != null}">
+			<c:import url="/WEB-INF/view/teacher/inc/teacherMenu.jsp"></c:import>
+		</c:when>
+		
+		<c:when test="${loginStudent != null}">
+			<c:import url="/WEB-INF/view/student/inc/studentMenu.jsp"></c:import>
+		</c:when>
+	</c:choose>
 	<h1>Test List</h1>
 	
 	<a href="${pageContext.request.contextPath}/test/addTest">시험등록</a>
@@ -80,7 +88,7 @@ a:hover {color : red;}
 						</c:when>
 						
 						<c:when test="${loginStudent != null}">
-							<a href="${pageContext.request.contextPath}/test/takeTest?studentNo=${loginStudent.studentNo}&testNo=${l.testNo}">응시</a>
+							<a href="${pageContext.request.contextPath}/student/test/testOne?studentNo=${loginStudent.studentNo}&testNo=${l.testNo}">응시</a>
 						</c:when>
 					</c:choose>
 				</td>

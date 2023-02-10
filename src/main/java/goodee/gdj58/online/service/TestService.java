@@ -10,9 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import goodee.gdj58.online.mapper.ExampleMapper;
+import goodee.gdj58.online.mapper.PaperMapper;
 import goodee.gdj58.online.mapper.QuestionMapper;
+import goodee.gdj58.online.mapper.ScoreMapper;
 import goodee.gdj58.online.mapper.TestMapper;
 import goodee.gdj58.online.vo.Example;
+import goodee.gdj58.online.vo.Paper;
 import goodee.gdj58.online.vo.Question;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +27,56 @@ public class TestService {
 	@Autowired private TestMapper testMapper;
 	@Autowired private QuestionMapper questionMapper;
 	@Autowired private ExampleMapper exampleMapper;
+	@Autowired private PaperMapper paperMapper;
+	@Autowired private ScoreMapper scoreMapper;
+	
+	public void addPapper(int testNo, int studentNo, int[] questionNo, int[] answer) {
+		
+		// 시험지 제출
+		for(int i = 0; i<questionNo.length; i++) {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			
+			paramMap.put("testNo", testNo);
+			paramMap.put("studentNo", studentNo);
+			paramMap.put("questionNo", questionNo[i]);
+			paramMap.put("answer", answer[i]);
+			
+			int result = paperMapper.insertPaper(paramMap);
+			
+			if(result != 1) {
+				log.debug("입력 실패 시스템을 중단합니다.");
+			}
+		}
+		
+		// 채점
+		final int MAX_SCORE = 100; // 문제를 모두 맞혔을 시 점수
+		int scoreSum = 0; // 최종 점수
+		int scoreOne = MAX_SCORE / questionNo.length;
+		
+		// 점수계산
+		Map<String, Object> selectParamMap = new HashMap<String, Object>();
+		selectParamMap.put("testNo", testNo);
+		selectParamMap.put("studentNo", studentNo);
+		
+		int correctAnswerCount = paperMapper.selectCorrectAnswer(selectParamMap);
+		
+		if(questionNo.length == correctAnswerCount) {
+			scoreSum = 100;
+		} else {
+			scoreSum = (int) (scoreOne * correctAnswerCount);
+		}
+		
+		// 계산된 점수 insert
+		Map<String, Object> insertParamMap = new HashMap<String, Object>();
+		insertParamMap.put("testNo", testNo);
+		insertParamMap.put("studentNo", studentNo);
+		insertParamMap.put("score", scoreSum);
+		int resultAddScore = scoreMapper.insertScore(insertParamMap);
+		
+		if(resultAddScore == 1) {
+			log.debug("점수 등록 성공");
+		}
+	}
 	
 	public Map<String,Object> getQuestionAndExample(int testNo, int questionNo){
 		
@@ -99,9 +152,41 @@ public class TestService {
 			return 0;
 		}
 	}
+	public List<Map<String, Object>> getTestResult(int testNo, int studentNo) {
+		List<Question> questionList = null;	// 문제 List
+		List<Example> exampleList = null;	// 보기 List
+		List<Paper> paperList = null;
+		
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		
+		// 문제 List 가져오기
+		questionList = questionMapper.selectQuestionList(testNo);
+		
+		// 학생이 제출한 답 가져오기
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("testNo", testNo);
+		paramMap.put("StudentNo", studentNo);
+		
+		paperList =  paperMapper.selectAnswer(paramMap);
+		
+		// 해당 문제의 보기 가져오기
+		for(int i = 0; i<questionList.size(); i++) {
+			exampleList = exampleMapper.selectExampleList(questionList.get(i).getQuestionNo());
+			
+			Map<String,Object> resultMap = new HashMap<String, Object>();
+			resultMap.put("questionList", questionList.get(i));
+			resultMap.put("paperList", paperList.get(i));
+			resultMap.put("exampleList", exampleList);
+			
+			list.add(resultMap);
+		}				
+		
+		return list;
+	}
 	public List<Map<String, Object>> getTestOne (int testNo) {
 		List<Question> questionList = null;	// 문제 List
 		List<Example> exampleList = null;	// 보기 List
+		
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		
 		questionList = questionMapper.selectQuestionList(testNo);
@@ -119,11 +204,12 @@ public class TestService {
 		return list;
 	}
 	
-	public List<Map<String, Object>> getTestList (int teacherNo, int currentPage,int rowPerPage,String searchWord) {
+	public List<Map<String, Object>> getTestList (int teacherNo, int studentNo, int currentPage,int rowPerPage,String searchWord) {
 		int beginRow = (currentPage-1) * rowPerPage;
 		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("teacherNo", teacherNo);
+		paramMap.put("studentNo", studentNo);
 		paramMap.put("beginRow", beginRow);
 		paramMap.put("rowPerPage", rowPerPage);
 		paramMap.put("searchWord", searchWord);

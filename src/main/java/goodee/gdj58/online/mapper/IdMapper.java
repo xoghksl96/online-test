@@ -4,5 +4,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface IdMapper {
-	String selectIdCheck(String id);
+	public String selectIdCheck(String id);
 }

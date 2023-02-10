@@ -33,6 +33,54 @@
 	<select id="selectTestList"
 		resultType="java.util.Map"
 		parameterType="java.util.Map">
+		SELECT DISTINCT
+			testNo
+			, teacherNo
+			, testTitle
+			, testDate
+			, teacherName
+			, studentNo
+			, score
+		FROM
+			(SELECT
+			test.test_no testNo
+			, test.teacher_no teacherNo
+			, test.test_title testTitle
+			, test.test_date testDate
+			, teacher.teacher_name teacherName
+			, student.student_no studentNo
+			, score.score score
+			FROM test
+			INNER JOIN teacher
+			ON test.teacher_no = teacher.teacher_no
+			INNER JOIN score
+			ON test.test_no = score.test_no
+			INNER JOIN student
+			ON score.student_no = student.student_no
+			UNION
+			SELECT
+			test.test_no testNo
+			, test.teacher_no teacherNo
+			, test.test_title testTitle
+			, test.test_date testDate
+			, teacher.teacher_name teacherName
+			, null studentNo
+			, null score
+			FROM test
+			INNER JOIN teacher
+			ON test.teacher_no = teacher.teacher_no) t
+		WHERE (studentNo = #{studentNo} OR studentNo IS NULL)
+		<if test="teacherNo != 0">
+			AND t.teacherNo = #{teacherNo}
+			<if test="searchWord != null || searchWord != ''">
+				AND test_title LIKE CONCAT('%', #{searchWord}, '%')
+			</if>
+		</if>
+		GROUP BY testNo
+		ORDER BY t.teacherNo DESC
+		LIMIT #{beginRow}, #{rowPerPage}
+		
+		<!--
 		SELECT
 			test.test_no testNo
 			, test.teacher_no teacherNo
@@ -42,7 +90,7 @@
 		FROM test INNER JOIN teacher
 			ON test.teacher_no = teacher.teacher_no
 		<where>
-			<if test="teacherNo != null || teacherNo != 0">
+			<if test="teacherNo != 0">
 				test.teacher_no = #{teacherNo}
 				<if test="searchWord != null || searchWord != ''">
 					AND test_title LIKE CONCAT('%', #{searchWord}, '%')
@@ -51,6 +99,7 @@
 		</where>
 		ORDER BY test.teacher_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}
+		 -->
 	</select>
 	
 	<select id="selectTestCount"

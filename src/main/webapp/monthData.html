@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+</head>
+<body>
+	<canvas id="myChart" style="width:100%;max-width:800px"></canvas>
+
+<!-- 차트 모델값을 가져오는 코드 -->
+<script>
+	// 모델 데이터를 가져온 후에 아래 차트를 그리는 코드가 실행 되어야한다 -> 동기로 처리해야한다
+	// async 값을 false로 변경, 참고 http://api.jquery.com/jquery.ajax
+	let xModel = [];
+	let yModel = [];
+	$.ajax({
+		async : false // 동기처리
+		, url:'/online-test/monthData'
+		, type:'get'
+		, success:function(model) { // model : /online-test/monthData 배겐드에서 객처로 반환 -> 변환이 필요하다
+			for(let attr in model) { // attr에는 키(속성)값 {1:500, 2:400, ....}
+				xModel.push(attr);
+				yModel.push(model[attr]);
+			}
+		}
+	});
+</script>
+
+<!-- 막대 차트를 그리는 스크립트 코드 -->
+<script>
+	var xValues = xModel;
+	var yValues = yModel;
+	var barColors = ["#FF0000", "#00FF00","#0000FF"];
+	
+	new Chart("myChart", {
+	  type: "bar",
+	  data: {
+	    labels: xValues,
+	    datasets: [{
+	      backgroundColor: barColors,
+	      data: yValues
+	    }]
+	  },
+	  options: {
+	    legend: {display: false},
+	    title: {
+	      display: true,
+	      text: "World Wine Production 2018"
+	    }
+	  }
+	});
+</script>
+</body>
+</html>
