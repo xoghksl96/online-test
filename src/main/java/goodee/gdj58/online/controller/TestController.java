@@ -159,10 +159,9 @@ public class TestController {
 			, @RequestParam(value="rowPerPage", defaultValue="10") int rowPerPage
 			, @RequestParam(value="searchWord", defaultValue="") String searchWord) {
 		
-		if(session.getAttribute("loginTeacher") != null) { // teacher 로그인 시, 자기가 등록한 문제만 출력하기 위함
-			Teacher loginTeacher = (Teacher) session.getAttribute("loginTeacher");
-			teacherNo = loginTeacher.getTeacherNo();
-		}	
+	
+		Teacher loginTeacher = (Teacher) session.getAttribute("loginTeacher");
+		teacherNo = loginTeacher.getTeacherNo();
 		
 		List<Map<String, Object>> list = testService.getTestList(teacherNo, studentNo, currentPage, rowPerPage, searchWord);
 		
@@ -187,6 +186,8 @@ public class TestController {
 			, @RequestParam(value="rowPerPage", defaultValue="10") int rowPerPage
 			, @RequestParam(value="searchWord", defaultValue="") String searchWord) {	
 		
+		Student loginStudent = (Student) session.getAttribute("loginStudent");
+		studentNo = loginStudent.getStudentNo();
 		
 		List<Map<String, Object>> list = testService.getTestList(teacherNo, studentNo, currentPage, rowPerPage, searchWord);
 		

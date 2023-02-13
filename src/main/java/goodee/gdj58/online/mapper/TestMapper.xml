@@ -34,13 +34,13 @@
 		resultType="java.util.Map"
 		parameterType="java.util.Map">
 		SELECT DISTINCT
-			testNo
-			, teacherNo
-			, testTitle
-			, testDate
-			, teacherName
-			, studentNo
-			, score
+			t.testNo
+			, t.teacherNo
+			, t.testTitle
+			, t.testDate
+			, t.teacherName
+			, t.studentNo
+			, t.score
 		FROM
 			(SELECT
 			test.test_no testNo
@@ -73,33 +73,12 @@
 		<if test="teacherNo != 0">
 			AND t.teacherNo = #{teacherNo}
 			<if test="searchWord != null || searchWord != ''">
-				AND test_title LIKE CONCAT('%', #{searchWord}, '%')
+				AND t.testTitle LIKE CONCAT('%', #{searchWord}, '%')
 			</if>
 		</if>
 		GROUP BY testNo
 		ORDER BY t.teacherNo DESC
 		LIMIT #{beginRow}, #{rowPerPage}
-		
-		<!--
-		SELECT
-			test.test_no testNo
-			, test.teacher_no teacherNo
-			, test.test_title testTitle
-			, test.test_date testDate
-			, teacher.teacher_name teacherName
-		FROM test INNER JOIN teacher
-			ON test.teacher_no = teacher.teacher_no
-		<where>
-			<if test="teacherNo != 0">
-				test.teacher_no = #{teacherNo}
-				<if test="searchWord != null || searchWord != ''">
-					AND test_title LIKE CONCAT('%', #{searchWord}, '%')
-				</if>
-			</if>
-		</where>
-		ORDER BY test.teacher_no DESC
-		LIMIT #{beginRow}, #{rowPerPage}
-		 -->
 	</select>
 	
 	<select id="selectTestCount"

@@ -88,7 +88,12 @@ a:hover {color : red;}
 						</c:when>
 						
 						<c:when test="${loginStudent != null}">
-							<a href="${pageContext.request.contextPath}/student/test/testOne?studentNo=${loginStudent.studentNo}&testNo=${l.testNo}">응시</a>
+							<c:if test="${l.score != null}">
+								${l.score}
+							</c:if>
+							<c:if test="${l.score == null}">
+								<a href="${pageContext.request.contextPath}/student/test/testOne?studentNo=${loginStudent.studentNo}&testNo=${l.testNo}">응시</a>
+							</c:if>
 						</c:when>
 					</c:choose>
 				</td>

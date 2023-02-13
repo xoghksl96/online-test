@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import goodee.gdj58.online.service.IdService;
 import goodee.gdj58.online.service.StudentService;
+import goodee.gdj58.online.service.TestService;
 import goodee.gdj58.online.vo.Employee;
 import goodee.gdj58.online.vo.Student;
 import goodee.gdj58.online.vo.Teacher;
@@ -23,8 +24,35 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class StudentController {
 	@Autowired StudentService studentService;
+	@Autowired TestService testService;
 	@Autowired IdService idService;
 	
+	// 부트스트랩확인(studentHome)
+	@GetMapping("/student/studentHome")
+	public String login(Model model, HttpSession session
+			, @RequestParam(value="teacherNo", defaultValue="0") int teacherNo
+			, @RequestParam(value="studentNo", defaultValue="0") int studentNo
+			, @RequestParam(value="currentPage", defaultValue="1") int currentPage
+			, @RequestParam(value="rowPerPage", defaultValue="5") int rowPerPage
+			, @RequestParam(value="searchWord", defaultValue="") String searchWord) {	
+		
+		Student loginStudent = (Student) session.getAttribute("loginStudent");
+		studentNo = loginStudent.getStudentNo();
+		
+		List<Map<String, Object>> list = testService.getTestList(teacherNo, studentNo, currentPage, rowPerPage, searchWord);
+		
+		model.addAttribute("list", list); // request.setAttribute("list", list) 기능 (매개변수 model 필요)
+		model.addAttribute("teacherNo", teacherNo);
+		model.addAttribute("studentNo", studentNo);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("rowPerPage", rowPerPage);
+		model.addAttribute("searchWord", searchWord);
+		
+		Map<String, Object> map = testService.getTestCount(teacherNo, currentPage, rowPerPage, searchWord);
+		model.addAttribute("map", map);
+		
+		return "student/studentHome";	
+	}
 	
 	// 로그아웃
 	@GetMapping("/student/logout")
@@ -43,7 +71,7 @@ public class StudentController {
 	public String loginTeacehr(HttpSession session, Student student) {
 		Student resultStudent = studentService.login(student);	// row == 1이면 입력성공
 		session.setAttribute("loginStudent", resultStudent);
-		return "redirect:/student/testList";
+		return "redirect:/student/studentHome";
 	}
 	
 	// student 삭제
@@ -75,7 +103,7 @@ public class StudentController {
 	@GetMapping("/employee/student/studentList")
 	public String studentList(Model model
 			, @RequestParam(value="currentPage", defaultValue="1") int currentPage
-			, @RequestParam(value="rowPerPage", defaultValue="10") int rowPerPage
+			, @RequestParam(value="rowPerPage", defaultValue="5") int rowPerPage
 			, @RequestParam(value="searchWord", defaultValue="") String searchWord) {
 			// int currentPage = request.getParameter("currentPage");
 		

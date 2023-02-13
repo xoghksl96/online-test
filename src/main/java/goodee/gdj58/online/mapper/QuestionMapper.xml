@@ -36,6 +36,7 @@
 			FROM question
 	</selectKey>
 </insert>
+
 <select id="selectQuestionList"
 	resultType="goodee.gdj58.online.vo.Question"
 	parameterType="int"

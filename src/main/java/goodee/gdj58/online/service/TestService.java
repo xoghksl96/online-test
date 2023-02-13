@@ -78,6 +78,7 @@ public class TestService {
 		}
 	}
 	
+	// 문제와 보기 가져오기
 	public Map<String,Object> getQuestionAndExample(int testNo, int questionNo){
 		
 		Question paramQuestion = new Question();
@@ -96,6 +97,7 @@ public class TestService {
 		return resultMap;
 	}
 	
+	// 문제와 보기 수정
 	public void modifyQuestionAndExample (int testNo
 			, int questionNo
 			, String questionTitle
@@ -105,6 +107,7 @@ public class TestService {
 		
 	}
 	
+	// 문제와 보기 삭제
 	public void removeQuestionAndExample (int questionNo) {
 		
 		int removeExample = exampleMapper.deleteExample(questionNo);
@@ -115,6 +118,7 @@ public class TestService {
 		}
 	}
 	
+	// 문제와 보기 등록
 	public int addQuesetionAndExample (int testNo, int questionIdx, String questionTitle, int[] exampleIdx, String[] exampleTitle, String[] exampleOx) {
 		
 		int addQuestion = 0;
@@ -152,6 +156,8 @@ public class TestService {
 			return 0;
 		}
 	}
+	
+	// 시험 결과 가져오기
 	public List<Map<String, Object>> getTestResult(int testNo, int studentNo) {
 		List<Question> questionList = null;	// 문제 List
 		List<Example> exampleList = null;	// 보기 List
@@ -183,6 +189,8 @@ public class TestService {
 		
 		return list;
 	}
+	
+	// 한 종목 시험의 문제와 보기 가져오기
 	public List<Map<String, Object>> getTestOne (int testNo) {
 		List<Question> questionList = null;	// 문제 List
 		List<Example> exampleList = null;	// 보기 List
@@ -204,6 +212,7 @@ public class TestService {
 		return list;
 	}
 	
+	// 시험리스트 가져오기
 	public List<Map<String, Object>> getTestList (int teacherNo, int studentNo, int currentPage,int rowPerPage,String searchWord) {
 		int beginRow = (currentPage-1) * rowPerPage;
 		
@@ -214,9 +223,13 @@ public class TestService {
 		paramMap.put("rowPerPage", rowPerPage);
 		paramMap.put("searchWord", searchWord);
 		
+		List list= testMapper.selectTestList(paramMap);
+		System.out.println(list.get(0));
+		System.out.println(list.get(1));
 		return testMapper.selectTestList(paramMap);
 	}
 	
+	// 시험 총 개수를 세어 첫,마지막 페이지 정보 가져오기
 	public Map<String, Object> getTestCount (int teacherNo, int currentPage,int rowPerPage,String searchWord) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("teacherNo", teacherNo);
