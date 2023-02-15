@@ -27,6 +27,7 @@ public class StudentController {
 	@Autowired TestService testService;
 	@Autowired IdService idService;
 	
+	// 전체시험 개수, 내가 응시한 시험개수 가져오기
 	// 부트스트랩확인(studentHome)
 	@GetMapping("/student/studentHome")
 	public String login(Model model, HttpSession session
@@ -39,6 +40,7 @@ public class StudentController {
 		Student loginStudent = (Student) session.getAttribute("loginStudent");
 		studentNo = loginStudent.getStudentNo();
 		
+		// 최근 5개의 시험 목록 가져오기
 		List<Map<String, Object>> list = testService.getTestList(teacherNo, studentNo, currentPage, rowPerPage, searchWord);
 		
 		model.addAttribute("list", list); // request.setAttribute("list", list) 기능 (매개변수 model 필요)
@@ -48,7 +50,13 @@ public class StudentController {
 		model.addAttribute("rowPerPage", rowPerPage);
 		model.addAttribute("searchWord", searchWord);
 		
-		Map<String, Object> map = testService.getTestCount(teacherNo, currentPage, rowPerPage, searchWord);
+		// 총 시험 개수 및 페이징에 필요한 정보 map에 담기
+		Map<String, Object> map = testService.getTestCount(teacherNo, currentPage, rowPerPage, searchWord);	
+		
+		// 내가 응시한 시험개수 map에 추가
+		int completeTestCount = testService.getCompleteTestCount(studentNo);
+		map.put("completeTestCount", completeTestCount);
+		
 		model.addAttribute("map", map);
 		
 		return "student/studentHome";	

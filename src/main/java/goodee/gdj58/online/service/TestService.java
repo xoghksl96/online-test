@@ -229,6 +229,13 @@ public class TestService {
 		return testMapper.selectTestList(paramMap);
 	}
 	
+	// 응시한 시험 개수 세기
+	public int getCompleteTestCount(int studentNo) {
+		int completeTestCount = testMapper.selectCompleteTestCount(studentNo);
+		
+		return completeTestCount;
+	}
+	
 	// 시험 총 개수를 세어 첫,마지막 페이지 정보 가져오기
 	public Map<String, Object> getTestCount (int teacherNo, int currentPage,int rowPerPage,String searchWord) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -252,7 +259,9 @@ public class TestService {
 		if(endPage > lastPage) {
 			endPage = lastPage;
 		}
+		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("testCount", testCount);
 		resultMap.put("startPage", startPage);
 		resultMap.put("endPage", endPage);
 		resultMap.put("lastPage", lastPage);

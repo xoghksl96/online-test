@@ -201,6 +201,6 @@ public class TestController {
 		Map<String, Object> map = testService.getTestCount(teacherNo, currentPage, rowPerPage, searchWord);
 		model.addAttribute("map", map);
 		
-		return "test/testList";
+		return "test/testListForStudent";
 	}
 }

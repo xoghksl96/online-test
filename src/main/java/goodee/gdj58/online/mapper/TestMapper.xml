@@ -81,6 +81,19 @@
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
 	
+	<select id="selectCompleteTestCount"
+		resultType="int"
+		parameterType="int">
+		
+		SELECT
+			count(*)
+		FROM
+			score
+		WHERE
+			student_no = #{studentNo}
+	
+	</select>
+	
 	<select id="selectTestCount"
 		resultType="int"
 		parameterType="java.util.Map">
