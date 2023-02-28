@@ -24,8 +24,8 @@
             </a>
           </li>
           <li>
-            <a href="forms-layouts.html">
-              <i class="bi bi-circle"></i><span>Form Layouts</span>
+            <a href="${pageContext.request.contextPath}/student/completeTestList">
+              <i class="bi bi-circle"></i><span>Report(성적표)</span>
             </a>
           </li>
           <li>

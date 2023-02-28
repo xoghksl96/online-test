@@ -30,6 +30,43 @@ public class TestService {
 	@Autowired private PaperMapper paperMapper;
 	@Autowired private ScoreMapper scoreMapper;
 	
+	// 응시한 시험 답안과 비교하기
+	public List<Map<String, Object>> getgetCompleteTestResult(int testNo, int studentNo){
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("testNo", testNo);
+		paramMap.put("studentNo", studentNo);
+		
+		List<Question> questionList = questionMapper.selectQuestionList(testNo);
+		List<Paper> paperList = paperMapper.selectAnswer(paramMap);
+		for(int i = 0; i<questionList.size(); i++) {
+			// 문제 번호 가져오기
+			int questionNo = questionList.get(i).getQuestionNo();
+			
+			// 문제에 해당하는 보기 가져오기
+			List<Example> exampleList = exampleMapper.selectExampleList(questionNo);
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("question", questionList.get(i)); // 한 문제에 대한 정보
+			map.put("paper", paperList.get(i)); // 한 문제의 제출한 답안에 대한 정보
+			map.put("exampleList", exampleList); // 한 문제의 보기에 대한 정보
+			
+			list.add(map);
+		}		
+		return list;
+	}
+	
+	// 학생이 응시한 시험목록 조회
+	public List<Map<String, Object>> getCompleteTest (int studentNo){
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		
+		list = testMapper.selectCompleteTest(studentNo);
+		
+		return list;		
+	}
+	
+	// 시험지 제출 / 채점
 	public void addPapper(int testNo, int studentNo, int[] questionNo, int[] answer) {
 		
 		// 시험지 제출

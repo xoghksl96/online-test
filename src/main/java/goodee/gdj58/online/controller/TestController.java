@@ -24,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 public class TestController {
 	@Autowired private TestService testService;
 	
+	// 응시한 시험목록 보기(학생)
+	
 	// 시험문제 제출(학생)
 	@PostMapping("/paper/addPaper")
 	public String addPaper(Model model, HttpSession session

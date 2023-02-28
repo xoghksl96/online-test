@@ -27,6 +27,31 @@ public class StudentController {
 	@Autowired TestService testService;
 	@Autowired IdService idService;
 	
+	// 응시한 한 시험의 성적표 보기
+	@GetMapping("/student/completeTestResult")
+	public String getCompleteTestResult(Model model, HttpSession session
+			, @RequestParam(value="testNo", defaultValue="1") int testNo) {
+		Student loginStudent = (Student) session.getAttribute("loginStudent");
+		int studentNo = loginStudent.getStudentNo();
+		
+		List<Map<String,Object>> list = testService.getgetCompleteTestResult(testNo, studentNo);
+		model.addAttribute("list",list);
+		
+		return "/student/completeTestResult";
+	}
+	
+	// 학생이 응시한 시험목록만 가져오기
+	@GetMapping("/student/completeTestList")
+	public String getCompleteTest(Model model, HttpSession session){
+		Student loginStudent = (Student) session.getAttribute("loginStudent");
+		int studentNo = loginStudent.getStudentNo();
+		
+		List<Map<String,Object>> list = testService.getCompleteTest(studentNo);
+		model.addAttribute("list",list);
+		
+		return "/student/completeTestListForStudent";
+	}
+	
 	// 전체시험 개수, 내가 응시한 시험개수 가져오기
 	// 부트스트랩확인(studentHome)
 	@GetMapping("/student/studentHome")

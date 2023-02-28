@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="goodee.gdj58.online.mapper.TestMapper">
-
+	
+	<select id="selectCompleteTest"
+		resultType="java.util.Map"
+		parameterType="int">
+		SELECT DISTINCT
+			test.test_no testNo
+			, test.teacher_no teacherNo
+			, test.test_title testTitle
+			, test.test_date testDate
+			, teacher.teacher_name teacherName
+			, score.score score
+		FROM test 
+			INNER JOIN teacher
+			ON test.teacher_no = teacher.teacher_no
+			INNER JOIN score
+			ON test.test_no = score.test_no
+			INNER JOIN student
+			ON score.student_no = student.student_no
+		WHERE
+			student.student_no = #{studentNo}
+	</select>
+	
 	<select id="selectTestOne"
 		resultType="java.util.Map"
 		parameterType="int">
@@ -18,6 +39,9 @@
 			, example.example_idx exampleIdx
 			, example.example_title exampleTitle
 			, example.example_ox exampleOx
+			, paper.paper_no paperNo
+			, paper.student_no studentNo
+			, paper.answer = answer
 		FROM test 
 			INNER JOIN teacher
 			ON test.teacher_no = teacher.teacher_no
@@ -25,6 +49,8 @@
 			ON test.test_no = question.test_no
 			INNER JOIN example
 			ON question.question_no = example.question_no
+			INNER JOIN paper
+			ON paper.test_no = test.test_no
 		WHERE
 			test.test_no = #{testNo}
 		ORDER BY question.question_idx, example.example_idx
