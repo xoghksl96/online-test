@@ -72,14 +72,14 @@
                     <div class="col-12">
                       <label for="yourUsername" class="form-label">Username</label>
                       <div class="input-group has-validation">
-                        <input type="text" name="studentId" class="form-control" id="yourUsername" required>
+                        <input type="text" name="studentId" class="form-control" id="yourUsername" value="s2" required>
                         <div class="invalid-feedback">Please enter your username.</div>
                       </div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="studentPw" class="form-control" id="yourPassword" required>
+                      <input type="password" name="studentPw" class="form-control" id="yourPassword" value="1234" required>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
 

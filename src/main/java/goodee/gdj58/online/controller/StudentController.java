@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import goodee.gdj58.online.service.IdService;
 import goodee.gdj58.online.service.StudentService;
 import goodee.gdj58.online.service.TestService;
-import goodee.gdj58.online.vo.Employee;
 import goodee.gdj58.online.vo.Student;
-import goodee.gdj58.online.vo.Teacher;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j // static Log log = new Log() 로그 객체를 선언하여 사용할 수 있게 함
